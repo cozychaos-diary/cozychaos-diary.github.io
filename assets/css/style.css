@@ -170,17 +170,17 @@ a:focus-visible {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;      /* lines up with the right-aligned title */
-  gap: 18px;
+  gap: 12px;
 }
 .nav__btn {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 16px 6px;
+  gap: 5px;
+  padding: 5px 11px 4px;
   font-family: var(--hand);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: .92rem;
   line-height: 1;
   color: var(--ink);
   text-decoration: none;
@@ -195,14 +195,14 @@ a:focus-visible {
 .nav__btn::before {               /* tape strip across the top edge */
   content: "";
   position: absolute;
-  top: -7px;
+  top: -5px;
   left: 50%;
-  width: 34px;
-  height: 12px;
+  width: 26px;
+  height: 9px;
   background: var(--tape);
   transform: translateX(-50%) rotate(-4deg);
 }
-.nav__icon { width: 17px; height: 17px; flex: none; }
+.nav__icon { width: 13px; height: 13px; flex: none; }
 .nav__list li .nav__btn:hover {
   transform: rotate(0) translateY(-3px);
   box-shadow: 0 8px 14px rgba(0,0,0,.4);
