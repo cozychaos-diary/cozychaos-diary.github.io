@@ -1,5 +1,6 @@
 <!--
-  Dark-green header band with the hanging garland, the blog title and tagline.
+  Journal-entry header: dark-green band with the hanging garland, the blog
+  title and tagline. The title links back to the (Blogspot-style) home page.
   `relative_url` prefixes links with `baseurl` from _config.yml, so links keep
   working whether the site lives at the domain root or in a /repo-name/ folder.
 -->
@@ -11,5 +12,7 @@
       {{ site.tagline }}<br>
       <span class="site-subtitle">{{ site.subtitle }}</span>
     </p>
+    <!-- Same menu buttons as the home page, styled as scrapbook tags in style.css -->
+    {% include nav.html %}
   </div>
 </header>
