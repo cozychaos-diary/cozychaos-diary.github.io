@@ -14,31 +14,43 @@ author: "The Girl Next Door"   # change to your name or keep the pen name
 about: "new girl in a huge city. hunting for a job, collecting quiet moments by the river, and writing it all down one chapter at a time."
 # Small round picture in the "About me" box. Any image in assets/img/ works.
 avatar: /assets/img/2026-10-28-river.jpg
-# OPTIONAL photos. Upload the image to assets/img/, then remove the # in front.
-#   background_image → the sky behind the page (like your Blogspot sunset photo)
-#   header_image     → replaces the drawn garden inside the header box
-# background_image: /assets/img/sky.jpg
-# header_image: /assets/img/header.jpg
+# Home-page pictures. By default the site uses its own painted artwork:
+#   background → /assets/img/bg-swirl.jpg       (pink & olive swirls with sparkles)
+#   header     → /assets/img/header-garden.jpg  (misty painted rose garden)
+# To use your own photo instead: upload it to assets/img/, then remove the #
+# in front of the line and put your file name in.
+# background_image: /assets/img/my-background.jpg
+# header_image: /assets/img/my-header.jpg
+
+# "Currently reading" journal in the home-page sidebar.
+# Change the title and author whenever you start a new book.
+# cover is optional: upload a picture of the book cover to assets/img/ and
+# remove the # to show it on the journal. Delete the whole block to hide the widget.
+reading:
+  title: "add your book here"
+  author: "in _config.yml"
+  # cover: /assets/img/book-cover.jpg
 
 # --- HEADER MENU BUTTONS -----------------------------------------------
 # Shown in the header of every page, left to right in this order.
 # To add a button, copy a block of 3 lines and change it:
 #   title → the text on the button
 #   url   → a page of this site ("/my-page/") or a full link ("https://…")
-#   icon  → home, heart, book, star, camera, mail, or leave it out
+#   icon  → seal (wax seal), bow (lace bow), or the simple line icons:
+#           home, heart, book, star, camera, mail — or leave the line out
 nav:
   - title: Home
     url: /
-    icon: home
+    icon: seal
   - title: About me
     url: /about/
-    icon: heart
+    icon: bow
 
 # --- THE TWO LINES YOU MUST CHECK -----------------------------------
 # url:     https://YOUR-GITHUB-USERNAME.github.io   (no trailing slash)
 # baseurl: ""            if your repo is named  YOUR-USERNAME.github.io
 #          "/REPO-NAME"  if your repo has any other name, e.g. "/cozy-chaos"
-url: "https://YOUR-GITHUB-USERNAME.github.io"
+url: "https://ditke06.github.io"
 baseurl: ""
 # ---------------------------------------------------------------------
 

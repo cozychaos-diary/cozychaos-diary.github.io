@@ -70,6 +70,35 @@ You can use *italics*, **bold**, and [links](https://example.com).
 Photos straight from a phone are huge; shrink them to ~1200px wide first (any free resizer)
 so the page loads fast. Square-ish photos look best in the polaroid frame.
 
+### Stickers on an entry
+Add a `stickers:` list to the entry's front matter (between the `---` lines).
+One block per sticker; put them wherever you like, or leave the list out.
+```yaml
+stickers:
+  - name: cat
+    spot: photo-top
+  - name: dog
+    spot: panel-bottom
+    size: small      # optional: small / large
+    tilt: -8         # optional: rotate, in degrees
+    flip: true       # optional: mirror left↔right
+```
+| | |
+|---|---|
+| **name** | `cat`, `dog`, `camera`, `coffee`, `stamp` (Budapest postmark), `diary-tag`, `sparkle`, `butterfly` |
+| **spot** — on the photo | `photo-top` (sitting on the frame), `photo-left`, `photo-right`, `photo-bottom` |
+| **spot** — on the note box | `note-top`, `note-bottom` (lying along the edge), `note-right` |
+| **spot** — on the text panel | `panel-top`, `panel-side`, `panel-left`, `panel-bottom` |
+
+Want a new sticker? Put an `.svg` or `.png` with a transparent background into
+`assets/stickers/` and use its file name (without the ending) as `name`.
+Its size is set in `assets/css/style.css` → look for `.sticker--cat { --w: 132px; }`
+and add a line like it for the new one.
+
+### "Currently reading"
+In `_config.yml`, under `reading:`, change `title` and `author`. For a cover picture,
+upload it to `assets/img/` and fill in `cover:`. Delete the whole `reading:` block to hide it.
+
 ### Adding a page and a header button
 1. Create a file in the main folder, e.g. **`my-photos.md`**:
    ```markdown
@@ -87,7 +116,8 @@ so the page loads fast. Square-ish photos look best in the polaroid frame.
        icon: camera
    ```
    Keep the two spaces of indentation like the existing buttons.
-   Icons: `home`, `heart`, `book`, `star`, `camera`, `mail` (or leave the line out).
+   Icons: `seal` (wax seal), `bow` (lace bow), or line icons `home`, `heart`, `book`,
+   `star`, `camera`, `mail` (or leave the line out).
    A button can also link outside the site: `url: https://instagram.com/…`.
 
 The **About me** page is `about.md` — edit its text the same way.
@@ -107,6 +137,9 @@ The **About me** page is `about.md` — edit its text the same way.
 | `assets/js/search.js` + `search.json` | The working search box. |
 | `about.md`, `_layouts/page.html` | The About me page, and the layout for any page you add. |
 | `_includes/nav.html`, `nav-icon.html` | The header menu buttons (list lives in `_config.yml` → `nav:`). |
+| `assets/img/bg-swirl.jpg`, `header-garden.jpg` | Home background and header paintings (original artwork). |
+| `assets/img/frame-flowers.svg`, `rose-emboss.svg`, `_includes/gold-rose.svg` | Violets frame, journal roses, clasp. |
+| `assets/stickers/` + `_includes/stickers.html` | The stickers and the code that places them. |
 | **Journal entries (green scrapbook look)** | |
 | `_layouts/post.html` | Arrangement of an entry (date label, polaroid, note, red panel). |
 | `_layouts/default.html` | The shell around entries and the 404 page. |

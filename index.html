@@ -13,7 +13,7 @@ title: home
 {% endif %}
 
 {% for post in site.posts %}
-<article class="box post-preview">
+<article class="box frame post-preview">
   <!-- e.g. "Wednesday, October 28, 2026" — same format Blogger uses -->
   <h2 class="date-header"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%A, %B %-d, %Y" }}</time></h2>
 
