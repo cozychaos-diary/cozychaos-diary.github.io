@@ -9,6 +9,30 @@ tagline: "leave your shoes at the door, catch your breath & stay for the chaos."
 subtitle: "(welcome to my tiny digital corner)"
 description: "A cozy diary about moving to a big city, job hunting, and figuring things out one day at a time."
 author: "The Girl Next Door"   # change to your name or keep the pen name
+# --- HOME PAGE (Blogspot-style) ---------------------------------------
+# "About me" box on the home page. Edit freely.
+about: "new girl in a huge city. hunting for a job, collecting quiet moments by the river, and writing it all down one chapter at a time."
+# Small round picture in the "About me" box. Any image in assets/img/ works.
+avatar: /assets/img/2026-10-28-river.jpg
+# OPTIONAL photos. Upload the image to assets/img/, then remove the # in front.
+#   background_image → the sky behind the page (like your Blogspot sunset photo)
+#   header_image     → replaces the drawn garden inside the header box
+# background_image: /assets/img/sky.jpg
+# header_image: /assets/img/header.jpg
+
+# --- HEADER MENU BUTTONS -----------------------------------------------
+# Shown in the header of every page, left to right in this order.
+# To add a button, copy a block of 3 lines and change it:
+#   title → the text on the button
+#   url   → a page of this site ("/my-page/") or a full link ("https://…")
+#   icon  → home, heart, book, star, camera, mail, or leave it out
+nav:
+  - title: Home
+    url: /
+    icon: home
+  - title: About me
+    url: /about/
+    icon: heart
 
 # --- THE TWO LINES YOU MUST CHECK -----------------------------------
 # url:     https://YOUR-GITHUB-USERNAME.github.io   (no trailing slash)

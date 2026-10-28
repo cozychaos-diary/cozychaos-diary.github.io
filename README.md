@@ -70,6 +70,28 @@ You can use *italics*, **bold**, and [links](https://example.com).
 Photos straight from a phone are huge; shrink them to ~1200px wide first (any free resizer)
 so the page loads fast. Square-ish photos look best in the polaroid frame.
 
+### Adding a page and a header button
+1. Create a file in the main folder, e.g. **`my-photos.md`**:
+   ```markdown
+   ---
+   layout: page
+   title: "my photos"
+   permalink: /my-photos/
+   ---
+   Your text here.
+   ```
+2. In **`_config.yml`**, under `nav:`, add a button pointing at it:
+   ```yaml
+     - title: My photos
+       url: /my-photos/
+       icon: camera
+   ```
+   Keep the two spaces of indentation like the existing buttons.
+   Icons: `home`, `heart`, `book`, `star`, `camera`, `mail` (or leave the line out).
+   A button can also link outside the site: `url: https://instagram.com/…`.
+
+The **About me** page is `about.md` — edit its text the same way.
+
 ---
 
 ## 3. What's where
@@ -78,12 +100,24 @@ so the page loads fast. Square-ish photos look best in the polaroid frame.
 |---|---|
 | `_config.yml` | Title, tagline, your address. Edit to rename the blog. |
 | `_posts/` | One Markdown file per diary entry. |
-| `_layouts/post.html` | Arrangement of a post page (date label, polaroid, note, red panel). |
-| `_layouts/default.html` | The shell around every page (fonts, header, footer). |
-| `index.html` | Home page — lists all posts, newest first. |
-| `_includes/` | Header, footer, doodle icons, the vine/flower header art. |
-| `assets/css/style.css` | All the looks. Colours are at the top under `:root`. |
+| **Home page (Blogspot look)** | |
+| `index.html` | The list of posts on the home page, newest first. |
+| `_layouts/home.html` | The home page shell: header box, About Me, Pages, Search, Blog Archive, footer. |
+| `assets/css/home.css` | The home page look (sky, red, pink footer). Colours at the top under `:root`. |
+| `assets/js/search.js` + `search.json` | The working search box. |
+| `about.md`, `_layouts/page.html` | The About me page, and the layout for any page you add. |
+| `_includes/nav.html`, `nav-icon.html` | The header menu buttons (list lives in `_config.yml` → `nav:`). |
+| **Journal entries (green scrapbook look)** | |
+| `_layouts/post.html` | Arrangement of an entry (date label, polaroid, note, red panel). |
+| `_layouts/default.html` | The shell around entries and the 404 page. |
+| `_includes/header.html`, `footer.html` | Green header and footer of entries. |
+| `assets/css/style.css` | The scrapbook look. Colours at the top under `:root`. |
+| **Shared** | |
+| `_includes/garland.svg`, `doodles.html` | Hanging vines/roses art, doodle icons. |
 | `404.html` | "Page not found" page. |
+
+Optional photos for the home page (your sunset sky, a header picture) are switched on in
+`_config.yml` — look for `background_image` and `header_image`.
 
 Free extras already switched on: an RSS feed at `/feed.xml`, a sitemap for search engines,
 and proper share previews.
