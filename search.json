@@ -1,0 +1,19 @@
+---
+layout: null
+---
+{%- comment -%}
+  Builds /search.json: one entry per post with its title, link, date and plain
+  text. `jsonify` turns each value into a safely quoted JSON string.
+  assets/js/search.js downloads this file and searches it in the browser.
+{%- endcomment -%}
+[
+{%- for post in site.posts -%}
+  {
+    "title": {{ post.title | jsonify }},
+    "chapter": {{ post.chapter | jsonify }},
+    "url": {{ post.url | relative_url | jsonify }},
+    "date": {{ post.date | date: "%d . %m . %Y" | jsonify }},
+    "text": {{ post.content | strip_html | strip_newlines | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+{%- endfor -%}
+]
