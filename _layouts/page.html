@@ -1,0 +1,15 @@
+---
+layout: home
+---
+{%- comment -%}
+  Layout for ordinary pages (About me, and any page you add later).
+  It reuses the home-page shell (header, sidebars, footer) and puts the
+  page's text in one readable box in the middle column.
+  To make a new page: create  my-page.md  with
+    layout: page / title: "…" / permalink: /my-page/
+  in its front matter, then add a button for it under `nav:` in _config.yml.
+{%- endcomment -%}
+<article class="box page-content">
+  <h2 class="page-content__title">{{ page.title }}</h2>
+  {{ content }}
+</article>

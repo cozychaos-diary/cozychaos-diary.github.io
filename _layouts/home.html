@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+{%- comment -%}
+  HOME PAGE SHELL — a cleaned-up version of the Blogspot "Watermark" page:
+    • sunset sky at the top fading into red
+    • framed garden header box with the handwritten white title
+    • three columns: About me | posts | search + archive
+    • blush-pink footer
+  The list of posts itself comes from index.html (inserted at the content tag).
+  Journal entries do NOT use this file; they use _layouts/post.html → default.html.
+
+  Optional photos from _config.yml are passed to the CSS as custom properties
+  (--sky-photo, --header-photo). If they're not set, the CSS falls back to
+  the drawn gradient sky / garden, so nothing breaks.
+{%- endcomment -%}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% seo %}
+  {% feed_meta %}
+
+  <!-- Reenie Beanie = the Blogspot title handwriting. Georgia (body text) is
+       built into every computer, so it needs no download. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ '/assets/css/home.css' | relative_url }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌹</text></svg>">
+</head>
+<body class="home"
+  {%- if site.background_image or site.header_image %} style="
+    {%- if site.background_image %}--sky-photo: url('{{ site.background_image | relative_url }}');{% endif -%}
+    {%- if site.header_image %}--header-photo: url('{{ site.header_image | relative_url }}');{% endif -%}
+  "{% endif %}>
+
+  <!-- Sky layer behind everything: photo (if set) or gradient, fading into the red -->
+  <div class="sky" aria-hidden="true"></div>
+
+  <!-- ===== Header box ===== -->
+  <header class="blog-header{% if site.header_image %} has-photo{% endif %}">
+    {% unless site.header_image %}{% include garland.svg %}{% endunless %}
+    <div class="blog-header__text">
+      <h1 class="blog-title"><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+      <p class="blog-description">{{ site.tagline }} <span>{{ site.subtitle }}</span></p>
+      <!-- Menu buttons (Home, About me, …) — edit the list under `nav:` in _config.yml -->
+      {% include nav.html %}
+    </div>
+  </header>
+
+  <!-- ===== Three columns ===== -->
+  <div class="blog-columns">
+
+    <!-- LEFT: About me (Blogger's profile widget) -->
+    <aside class="col col--left" aria-label="About me">
+      <section class="box widget">
+        <h2 class="widget__title">About Me</h2>
+        {% if site.avatar %}
+          <img class="avatar" src="{{ site.avatar | relative_url }}" alt="" width="80" height="80">
+        {% endif %}
+        <p class="about__name">{{ site.author }}</p>
+        <p>{{ site.about }}</p>
+      </section>
+    </aside>
+
+    <!-- CENTER: the posts (from index.html) -->
+    <main class="col col--main" id="posts">
+      {{ content }}
+    </main>
+
+    <!-- RIGHT: pages, search, archive -->
+    <aside class="col col--right" aria-label="Sidebar">
+
+      <section class="box widget">
+        <h2 class="widget__title">Pages</h2>
+        <ul class="plain-list">
+          <li><a href="{{ '/' | relative_url }}">Home</a></li>
+          {% if site.posts.size > 0 %}
+            <li><a href="{{ site.posts.first.url | relative_url }}">Latest entry</a></li>
+          {% endif %}
+        </ul>
+      </section>
+
+      <!-- Search: assets/js/search.js loads search.json (built by Jekyll) and
+           filters it as you type. Works without any server. -->
+      <section class="box widget" role="search">
+        <h2 class="widget__title">Search This Blog</h2>
+        <label class="visually-hidden" for="search-input">Search posts</label>
+        <input id="search-input" class="search__input" type="search" placeholder="river, cafe, job…" autocomplete="off"
+               data-index="{{ '/search.json' | relative_url }}">
+        <ul id="search-results" class="search__results" aria-live="polite"></ul>
+      </section>
+
+      <!-- Blog Archive: a month heading each time the month changes
+           (site.posts is newest first, so months come out in order). -->
+      <section class="box widget">
+        <h2 class="widget__title">Blog Archive</h2>
+        <ul class="archive">
+          {%- assign prev_month = "" -%}
+          {%- for post in site.posts -%}
+            {%- assign month = post.date | date: "%B %Y" -%}
+            {%- if month != prev_month %}
+              <li class="archive__month">{{ month }}</li>
+              {%- assign prev_month = month -%}
+            {%- endif %}
+            <li class="archive__post"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+          {%- endfor %}
+        </ul>
+      </section>
+
+    </aside>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="blog-footer">
+    <p>&copy; {{ site.time | date: "%Y" }} {{ site.author }} · Powered by GitHub Pages</p>
+  </footer>
+
+  <script src="{{ '/assets/js/search.js' | relative_url }}" defer></script>
+</body>
+</html>
