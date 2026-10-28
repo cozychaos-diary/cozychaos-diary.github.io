@@ -1,44 +1,39 @@
 ---
-layout: default
+layout: home
 title: home
 ---
 {%- comment -%}
-  Home page: every post in _posts, newest first, as a scrapbook card.
-  site.posts is already sorted newest → oldest by Jekyll.
-  Each card is one link (the whole card is clickable).
+  Home page post list, Blogger style: date header, title, picture + first
+  paragraph, "Read more »", and a small "posted by" line.
+  site.posts is sorted newest → oldest by Jekyll.
+  Clicking through opens the entry in the scrapbook design (_layouts/post.html).
 {%- endcomment -%}
-<section class="intro paper-note">
-  <span class="tape tape--top" aria-hidden="true"></span>
-  <p>a little diary about a big city, a stubborn job hunt, and learning that it's okay not to have it all figured out yet.</p>
-</section>
-
-<ol class="cards" reversed>
-  {% for post in site.posts %}
-  <li class="card">
-    <a class="card__link" href="{{ post.url | relative_url }}">
-      <span class="card__date">
-        <span class="tape tape--right" aria-hidden="true"></span>
-        {{ post.date | date: "%d . %m . %Y" }}
-      </span>
-
-      {% if post.photo %}
-      <span class="card__photo">
-        <!-- alt="" because the card's text already says what the entry is -->
-        <img src="{{ post.photo | relative_url }}" alt="" loading="lazy">
-      </span>
-      {% endif %}
-
-      <span class="card__body">
-        <span class="card__title">{% if post.chapter %}chapter {{ post.chapter }}: {% endif %}{{ post.title }}</span>
-        <!-- First paragraph of the post, HTML removed, cut to 40 words -->
-        <span class="card__excerpt">{{ post.excerpt | strip_html | truncatewords: 40 }}</span>
-        <span class="card__more">read this chapter &rarr;</span>
-      </span>
-    </a>
-  </li>
-  {% endfor %}
-</ol>
-
 {% if site.posts.size == 0 %}
-  <p class="empty">no chapters yet — the first one is coming soon.</p>
+  <p class="box no-posts">No posts.</p>
 {% endif %}
+
+{% for post in site.posts %}
+<article class="box post-preview">
+  <!-- e.g. "Wednesday, October 28, 2026" — same format Blogger uses -->
+  <h2 class="date-header"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%A, %B %-d, %Y" }}</time></h2>
+
+  <h3 class="post-title">
+    <a href="{{ post.url | relative_url }}">{% if post.chapter %}chapter {{ post.chapter }}: {% endif %}{{ post.title }}</a>
+  </h3>
+
+  <div class="post-snippet">
+    {% if post.photo %}
+      <a class="post-thumb" href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
+        <img src="{{ post.photo | relative_url }}" alt="" loading="lazy">
+      </a>
+    {% endif %}
+    <!-- first paragraph, HTML removed, cut to 45 words -->
+    <p>{{ post.excerpt | strip_html | truncatewords: 45 }}</p>
+  </div>
+
+  <p class="jump-link"><a href="{{ post.url | relative_url }}">Read more &raquo;</a></p>
+  <p class="post-footer">Posted by {{ site.author }} at {{ post.date | date: "%H:%M" }}</p>
+</article>
+{% endfor %}
+
+<p class="feed-link">Subscribe to: <a href="{{ '/feed.xml' | relative_url }}">Posts (RSS)</a></p>
