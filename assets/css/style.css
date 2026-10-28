@@ -1,6 +1,9 @@
 /* =====================================================================
-   cozy chaos — scrapbook stylesheet
+   JOURNAL ENTRIES — green scrapbook stylesheet
    ---------------------------------------------------------------------
+   Used by every post page and the 404 page (_layouts/default.html).
+   The home page has its own stylesheet: home.css.
+
    No images are used for textures: paper grain is an SVG noise filter
    embedded as a data URI, torn edges are CSS clip-path polygons, tape is
    a translucent rotated rectangle. Change the colours in :root to retheme.
@@ -49,14 +52,13 @@ body {
   font-family: var(--type);
   font-size: 1.02rem;
   line-height: 1.6;
-  /* layered background: grain on top, soft dark vignette, then the moss green */
+  /* layered background: grain on top, soft light and dark glows, then the moss green */
   background-color: var(--moss);
   background-image:
     var(--grain),
     radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.10), transparent 60%),
     radial-gradient(ellipse at 50% 120%, rgba(0,0,0,.25), transparent 70%),
     linear-gradient(160deg, var(--moss) 0%, var(--moss-deep) 100%);
-  background-attachment: scroll;
   min-height: 100vh;
   overflow-x: hidden;   /* rotated scraps must never cause sideways scrolling */
   /* column flexbox + main{flex:1} keeps the footer at the bottom on short pages */
@@ -94,11 +96,11 @@ a:focus-visible {
 
 /* Any element with a ::before "paper" layer. The element itself is not
    clipped (so tape can stick out); only its background layer is torn. */
-.date-tag, .panel, .card__link, .paper-note {
+.date-tag, .panel, .paper-note {
   position: relative;
   isolation: isolate;          /* keeps the z-index:-1 layer inside this element */
 }
-.date-tag::before, .card__link::before, .paper-note::before {
+.date-tag::before, .paper-note::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -155,6 +157,63 @@ a:focus-visible {
 }
 .site-subtitle { opacity: .85; }
 
+/* ---------- header menu buttons (scrapbook version) ----------
+   Look: little cream paper tags, each with a strip of tape on top.
+     • alternate tags tilt left/right, like they were stuck on by hand
+     • hover straightens and lifts the tag
+     • the current page's tag is the maroon paper of the diary panels   */
+.nav { margin-top: 18px; }
+.nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;      /* lines up with the right-aligned title */
+  gap: 18px;
+}
+.nav__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px 6px;
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--ink);
+  text-decoration: none;
+  text-shadow: none;
+  background: var(--grain), linear-gradient(170deg, var(--paper), var(--paper-shade));
+  border-radius: 2px;
+  box-shadow: 0 4px 8px rgba(0,0,0,.35);
+  transform: rotate(-2deg);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.nav__list li:nth-child(even) .nav__btn { transform: rotate(2deg); }
+.nav__btn::before {               /* tape strip across the top edge */
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  width: 34px;
+  height: 12px;
+  background: var(--tape);
+  transform: translateX(-50%) rotate(-4deg);
+}
+.nav__icon { width: 17px; height: 17px; flex: none; }
+.nav__list li .nav__btn:hover {
+  transform: rotate(0) translateY(-3px);
+  box-shadow: 0 8px 14px rgba(0,0,0,.4);
+}
+.nav__btn:focus-visible { outline: 3px dashed var(--paper); outline-offset: 4px; }
+.nav__btn[aria-current="page"] {
+  color: var(--cream-text);
+  background: var(--grain), linear-gradient(175deg, var(--maroon), var(--maroon-deep));
+}
+@media (prefers-reduced-motion: reduce) { .nav__btn { transition: none; } }
+
 /* ---------- main column ---------- */
 .page {
   max-width: 1000px;
@@ -173,7 +232,7 @@ a:focus-visible {
 }
 .entry__left { position: relative; padding-top: 4px; }
 
-/* Torn date label, pulled up so it overlaps the header like the original. */
+/* Torn paper date label, pulled up so it overlaps the header like the original. */
 .date-tag {
   display: inline-block;
   margin: -34px 0 36px;
@@ -280,9 +339,7 @@ a:focus-visible {
 }
 .pager__link:hover { background: #fff7e6; }
 
-/* =====================================================================
-   HOME PAGE
-   ===================================================================== */
+/* ---------- note scrap (used by the 404 page) ---------- */
 .paper-note {
   max-width: 560px;
   margin: -26px auto 48px;
@@ -291,59 +348,6 @@ a:focus-visible {
   transform: rotate(-.8deg);
 }
 .paper-note p { margin: 0 0 .6em; }
-
-.cards {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 44px;
-}
-.card:nth-child(odd)  .card__link { transform: rotate(-.7deg); }
-.card:nth-child(even) .card__link { transform: rotate(.7deg); }
-
-.card__link {
-  display: grid;
-  grid-template-columns: 180px 1fr;
-  grid-template-areas: "date date" "photo body";
-  gap: 14px 26px;
-  padding: 26px 28px 28px;
-  text-decoration: none;
-  transition: transform .2s ease;
-}
-.card__link:hover, .card__link:focus-visible { transform: rotate(0) translateY(-4px); }
-@media (prefers-reduced-motion: reduce) { .card__link { transition: none; } }
-
-.card__date {
-  grid-area: date;
-  position: relative;
-  justify-self: start;
-  font-family: var(--hand);
-  font-weight: 700;
-  font-size: 1.25rem;
-}
-.card__date .tape { width: 60px; height: 18px; right: -48px; bottom: 2px; }
-
-.card__photo {
-  grid-area: photo;
-  display: block;
-  padding: 8px 8px 22px;
-  background: #f8f3e7;
-  box-shadow: 0 4px 10px rgba(0,0,0,.3);
-  transform: rotate(-2deg);
-  align-self: start;
-}
-.card__photo img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
-
-.card__body { grid-area: body; display: flex; flex-direction: column; gap: 10px; }
-.card__title { font-family: var(--hand); font-size: 1.55rem; line-height: 1.2; }
-.card__excerpt { font-size: .98rem; }
-.card__more { font-family: var(--hand); font-size: 1.1rem; color: var(--maroon); text-decoration: underline; text-underline-offset: 3px; }
-
-/* Card without a photo: body takes the full width. */
-.card__link:not(:has(.card__photo)) { grid-template-columns: 1fr; grid-template-areas: "date" "body"; }
-
-.empty { text-align: center; font-family: var(--hand); font-size: 1.3rem; }
 
 /* ---------- footer ---------- */
 .site-footer {
@@ -361,6 +365,7 @@ a:focus-visible {
 @media (max-width: 760px) {
   .site-header { padding: 96px 16px 56px; min-height: 0; }
   .site-header__text { text-align: center; }
+  .nav__list { justify-content: center; }
 
   .page { padding: 0 16px 48px; }
 
@@ -378,11 +383,4 @@ a:focus-visible {
   .pager { grid-template-columns: 1fr; text-align: center; }
   .pager > :last-child { text-align: center; }
   .pager > span:empty { display: none; }
-
-  .card__link {
-    grid-template-columns: 1fr;
-    grid-template-areas: "date" "photo" "body";
-    padding: 22px 20px 24px;
-  }
-  .card__photo { width: 70%; justify-self: center; }
 }
