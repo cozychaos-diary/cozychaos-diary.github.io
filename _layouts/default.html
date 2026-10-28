@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{%- comment -%}
+  Base layout. Every page is wrapped in this shell; the page's own HTML is
+  inserted at the content tag inside <main>. Layout chain for a post:
+  post.md → _layouts/post.html → this file.
+  (Liquid comment, not an HTML comment: Liquid runs tags even inside
+  HTML comments, which would print the page twice.)
+{%- endcomment -%}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- jekyll-seo-tag: writes <title>, description and social-preview tags -->
+  {% seo %}
+  <!-- jekyll-feed: adds <link rel="alternate"> pointing to /feed.xml -->
+  {% feed_meta %}
+
+  <!-- Fonts: Kalam (handwriting) + Courier Prime (typewriter) from Google Fonts.
+       preconnect opens the connection early so text appears sooner. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <!-- Browser-tab icon: a leaf emoji drawn as inline SVG, no image file needed -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body>
+  {% include doodles.html %}
+  {% include header.html %}
+  <main class="page">
+    {{ content }}
+  </main>
+  {% include footer.html %}
+</body>
+</html>

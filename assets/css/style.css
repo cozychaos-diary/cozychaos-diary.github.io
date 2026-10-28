@@ -1,0 +1,388 @@
+/* =====================================================================
+   cozy chaos — scrapbook stylesheet
+   ---------------------------------------------------------------------
+   No images are used for textures: paper grain is an SVG noise filter
+   embedded as a data URI, torn edges are CSS clip-path polygons, tape is
+   a translucent rotated rectangle. Change the colours in :root to retheme.
+   ===================================================================== */
+
+:root {
+  /* --- colour tokens --- */
+  --ink: #2b2620;           /* dark brown-black "pen" colour */
+  --paper: #efe5cf;         /* cream scrap paper */
+  --paper-shade: #e2d5b8;   /* slightly darker paper, for gradients */
+  --maroon: #7b2228;        /* the red paper panels */
+  --maroon-deep: #5c161b;
+  --cream-text: #f4eadb;    /* text on maroon */
+  --forest: #1d2920;        /* header band */
+  --moss: #7a9558;          /* page background green */
+  --moss-deep: #5f7a43;
+  --tape: rgba(226, 212, 176, 0.78);
+  --wood-1: #5a3c25;
+  --wood-2: #7a5533;
+
+  /* --- fonts --- */
+  --hand: "Kalam", "Comic Sans MS", cursive;          /* handwriting */
+  --type: "Courier Prime", "Courier New", monospace;  /* typewriter */
+
+  /* --- paper grain: 160×160 tile of fractal noise.
+         feTurbulence makes the noise; feColorMatrix turns it into
+         semi-transparent black specks so it darkens whatever is beneath. --- */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .2 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+
+  /* --- torn-edge outline used on paper scraps. Points go clockwise
+         around the box; the small in/out zigzag is what reads as "torn". --- */
+  --torn: polygon(0% 3%, 6% 0%, 14% 2%, 22% 0%, 31% 3%, 40% 1%, 49% 3%, 58% 0%, 67% 2%, 76% 0%, 85% 3%, 93% 1%, 100% 3%,
+                  99% 14%, 100% 27%, 98% 40%, 100% 54%, 99% 67%, 100% 80%, 98% 92%, 100% 98%,
+                  92% 100%, 83% 97%, 74% 100%, 64% 98%, 55% 100%, 45% 97%, 36% 100%, 26% 98%, 17% 100%, 8% 97%, 0% 100%,
+                  1% 88%, 0% 75%, 2% 62%, 0% 49%, 1% 36%, 0% 22%, 2% 11%);
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--type);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  /* layered background: grain on top, soft dark vignette, then the moss green */
+  background-color: var(--moss);
+  background-image:
+    var(--grain),
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.10), transparent 60%),
+    radial-gradient(ellipse at 50% 120%, rgba(0,0,0,.25), transparent 70%),
+    linear-gradient(160deg, var(--moss) 0%, var(--moss-deep) 100%);
+  background-attachment: scroll;
+  min-height: 100vh;
+  overflow-x: hidden;   /* rotated scraps must never cause sideways scrolling */
+  /* column flexbox + main{flex:1} keeps the footer at the bottom on short pages */
+  display: flex;
+  flex-direction: column;
+}
+main.page { flex: 1 0 auto; width: 100%; }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+
+/* Keyboard focus ring that shows on every background. */
+a:focus-visible {
+  outline: 3px dashed var(--paper);
+  outline-offset: 4px;
+}
+
+/* ---------- reusable bits ---------- */
+
+/* Masking tape: a translucent strip with slightly frayed ends (via clip-path). */
+.tape {
+  position: absolute;
+  width: 92px;
+  height: 26px;
+  background: var(--tape);
+  box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  clip-path: polygon(3% 0, 97% 4%, 100% 50%, 96% 100%, 4% 96%, 0 50%);
+  z-index: 3;
+  pointer-events: none;
+}
+.tape--top   { top: -14px; left: 50%; transform: translateX(-50%) rotate(-2deg); }
+.tape--right { right: -34px; bottom: -6px; transform: rotate(-32deg); }
+.tape--tl    { top: -8px; left: -26px; transform: rotate(-38deg); }
+.tape--br    { bottom: -6px; right: -26px; transform: rotate(-38deg); }
+
+/* Any element with a ::before "paper" layer. The element itself is not
+   clipped (so tape can stick out); only its background layer is torn. */
+.date-tag, .panel, .card__link, .paper-note {
+  position: relative;
+  isolation: isolate;          /* keeps the z-index:-1 layer inside this element */
+}
+.date-tag::before, .card__link::before, .paper-note::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--grain), linear-gradient(170deg, var(--paper), var(--paper-shade));
+  clip-path: var(--torn);
+  filter: drop-shadow(0 3px 4px rgba(0,0,0,.25));
+}
+
+/* Doodles: small inline SVGs (symbols live in _includes/doodles.html). */
+.doodle {
+  position: absolute;
+  color: var(--ink);
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* ---------- header ---------- */
+.site-header {
+  position: relative;
+  min-height: 230px;
+  padding: 72px 24px 64px;
+  background: var(--grain), radial-gradient(ellipse at 70% 60%, #2a3a2d, var(--forest) 70%);
+  color: var(--cream-text);
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+.garland {
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  height: 170px;
+  pointer-events: none;
+}
+.site-header__text {
+  position: relative;          /* sits above the garland */
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: right;
+}
+.site-title {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: clamp(2rem, 5.5vw, 3.3rem);
+  line-height: 1.1;
+  text-decoration: none;
+  text-shadow: 0 2px 6px rgba(0,0,0,.6);
+}
+.site-tagline {
+  margin: .4rem 0 0;
+  font-size: clamp(.9rem, 2.2vw, 1.05rem);
+  line-height: 1.45;
+  text-shadow: 0 1px 4px rgba(0,0,0,.7);
+}
+.site-subtitle { opacity: .85; }
+
+/* ---------- main column ---------- */
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+
+/* =====================================================================
+   POST PAGE
+   ===================================================================== */
+.entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+.entry__left { position: relative; padding-top: 4px; }
+
+/* Torn date label, pulled up so it overlaps the header like the original. */
+.date-tag {
+  display: inline-block;
+  margin: -34px 0 36px;
+  padding: 14px 34px 12px 26px;
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  line-height: 1;
+  transform: rotate(-2deg);
+}
+
+/* Polaroid frame */
+.polaroid {
+  position: relative;
+  margin: 0 0 0 6%;
+  width: 84%;
+  padding: 14px 14px 10px;
+  background: var(--grain), #f3ecdc;
+  box-shadow: 0 8px 18px rgba(0,0,0,.35);
+  transform: rotate(-1.5deg);
+}
+.polaroid img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  /* a faint warm wash so low-resolution photos look intentional */
+  filter: saturate(1.05) contrast(1.03);
+}
+.entry__title {
+  margin: .5rem 0 0;
+  font-family: var(--hand);
+  font-weight: 400;
+  font-size: clamp(1.35rem, 3vw, 1.65rem);
+  line-height: 1.2;
+}
+.doodle--clip { width: 22px; height: 56px; right: -10px; top: 40%; transform: rotate(14deg); color: #6d6a64; }
+
+/* scattered doodles around the left column */
+.doodle--s1 { width: 38px; height: 38px; left: -14px; top: 140px; }
+.doodle--s2 { width: 30px; height: 30px; left: -6px;  top: 196px; color: var(--paper); }
+.doodle--s3 { width: 16px; height: 16px; left: 30px;  top: 118px; }
+.doodle--b1 { width: 34px; height: 30px; left: -12px; top: 330px; }
+.doodle--h1 { width: 34px; height: 30px; right: 2%;   top: 0; }
+
+/* Wood-framed maroon note board */
+.board {
+  position: relative;
+  margin: 44px 0 0;
+  padding: 22px 24px;
+  background: var(--grain), radial-gradient(ellipse at 50% 40%, var(--maroon), var(--maroon-deep));
+  color: var(--cream-text);
+  border: 12px solid var(--wood-1);
+  /* wood grain: repeating stripes stretched across the 12px border */
+  border-image: repeating-linear-gradient(100deg, var(--wood-1) 0 7px, var(--wood-2) 7px 12px, #664528 12px 17px) 12;
+  box-shadow: 0 8px 16px rgba(0,0,0,.35), inset 0 0 18px rgba(0,0,0,.35);
+  text-align: center;
+  font-size: clamp(1.05rem, 2.4vw, 1.22rem);
+  line-height: 1.5;
+  transform: rotate(.6deg);
+}
+.board p { margin: 0; }
+
+/* Maroon paper panel holding the post text */
+.panel {
+  margin-top: 18px;
+  padding: 44px 30px 38px;
+  color: var(--cream-text);
+  transform: rotate(.5deg);
+}
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--grain), linear-gradient(175deg, var(--maroon), var(--maroon-deep));
+  clip-path: var(--torn);
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,.35));
+}
+.panel p { margin: 0 0 1.25em; }
+.panel p:last-child { margin-bottom: 0; }
+.panel a { color: #ffd9c2; }
+.panel img { margin: 1em auto; border: 8px solid var(--paper); }
+.panel h2, .panel h3 { font-family: var(--hand); font-weight: 700; line-height: 1.2; }
+.panel blockquote { margin: 1em 0; padding-left: 1em; border-left: 3px solid rgba(244,234,219,.5); font-style: italic; }
+.doodle--h2 { width: 30px; height: 28px; left: -40px; top: -6px; transform: rotate(-12deg); }
+
+/* older / newer navigation */
+.pager {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+  margin-top: 56px;
+  font-family: var(--hand);
+  font-size: 1.15rem;
+}
+.pager > :last-child { text-align: right; }
+.pager__link {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--paper);
+  text-decoration: none;
+  box-shadow: 0 3px 6px rgba(0,0,0,.25);
+}
+.pager__link:hover { background: #fff7e6; }
+
+/* =====================================================================
+   HOME PAGE
+   ===================================================================== */
+.paper-note {
+  max-width: 560px;
+  margin: -26px auto 48px;
+  padding: 26px 30px 20px;
+  text-align: center;
+  transform: rotate(-.8deg);
+}
+.paper-note p { margin: 0 0 .6em; }
+
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 44px;
+}
+.card:nth-child(odd)  .card__link { transform: rotate(-.7deg); }
+.card:nth-child(even) .card__link { transform: rotate(.7deg); }
+
+.card__link {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  grid-template-areas: "date date" "photo body";
+  gap: 14px 26px;
+  padding: 26px 28px 28px;
+  text-decoration: none;
+  transition: transform .2s ease;
+}
+.card__link:hover, .card__link:focus-visible { transform: rotate(0) translateY(-4px); }
+@media (prefers-reduced-motion: reduce) { .card__link { transition: none; } }
+
+.card__date {
+  grid-area: date;
+  position: relative;
+  justify-self: start;
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+.card__date .tape { width: 60px; height: 18px; right: -48px; bottom: 2px; }
+
+.card__photo {
+  grid-area: photo;
+  display: block;
+  padding: 8px 8px 22px;
+  background: #f8f3e7;
+  box-shadow: 0 4px 10px rgba(0,0,0,.3);
+  transform: rotate(-2deg);
+  align-self: start;
+}
+.card__photo img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+
+.card__body { grid-area: body; display: flex; flex-direction: column; gap: 10px; }
+.card__title { font-family: var(--hand); font-size: 1.55rem; line-height: 1.2; }
+.card__excerpt { font-size: .98rem; }
+.card__more { font-family: var(--hand); font-size: 1.1rem; color: var(--maroon); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Card without a photo: body takes the full width. */
+.card__link:not(:has(.card__photo)) { grid-template-columns: 1fr; grid-template-areas: "date" "body"; }
+
+.empty { text-align: center; font-family: var(--hand); font-size: 1.3rem; }
+
+/* ---------- footer ---------- */
+.site-footer {
+  padding: 22px 24px;
+  text-align: center;
+  font-size: .9rem;
+  color: var(--cream-text);
+  background: var(--grain), var(--forest);
+}
+.site-footer p { margin: 0; }
+
+/* =====================================================================
+   PHONES & SMALL TABLETS (≤ 760px): stack everything in one column
+   ===================================================================== */
+@media (max-width: 760px) {
+  .site-header { padding: 96px 16px 56px; min-height: 0; }
+  .site-header__text { text-align: center; }
+
+  .page { padding: 0 16px 48px; }
+
+  .entry { grid-template-columns: 1fr; gap: 28px; }
+  .date-tag { margin-bottom: 26px; }
+  .polaroid { width: 88%; margin-left: 6%; }
+  .board { margin-top: 32px; border-width: 10px; }
+  .panel { margin-top: 0; padding: 40px 22px 32px; transform: rotate(.3deg); }
+  .doodle--h2 { left: auto; right: 8px; top: -30px; }
+  /* tapes that stick out sideways are pulled in so nothing overflows */
+  .tape--right { right: -20px; }
+  .tape--tl { left: -14px; }
+  .tape--br { right: -14px; }
+
+  .pager { grid-template-columns: 1fr; text-align: center; }
+  .pager > :last-child { text-align: center; }
+  .pager > span:empty { display: none; }
+
+  .card__link {
+    grid-template-columns: 1fr;
+    grid-template-areas: "date" "photo" "body";
+    padding: 22px 20px 24px;
+  }
+  .card__photo { width: 70%; justify-self: center; }
+}

@@ -1,0 +1,53 @@
+# =====================================================================
+#  Site settings — GitHub Pages reads this file to build your blog.
+#  After editing it, commit; GitHub rebuilds the site in ~1 minute.
+# =====================================================================
+
+# Shown in the header, browser tab, search results and the RSS feed.
+title: "The Girl Next Door's cozy chaos"
+tagline: "leave your shoes at the door, catch your breath & stay for the chaos."
+subtitle: "(welcome to my tiny digital corner)"
+description: "A cozy diary about moving to a big city, job hunting, and figuring things out one day at a time."
+author: "The Girl Next Door"   # change to your name or keep the pen name
+
+# --- THE TWO LINES YOU MUST CHECK -----------------------------------
+# url:     https://YOUR-GITHUB-USERNAME.github.io   (no trailing slash)
+# baseurl: ""            if your repo is named  YOUR-USERNAME.github.io
+#          "/REPO-NAME"  if your repo has any other name, e.g. "/cozy-chaos"
+url: "https://YOUR-GITHUB-USERNAME.github.io"
+baseurl: ""
+# ---------------------------------------------------------------------
+
+# Post dates are interpreted in this time zone (matters near midnight).
+timezone: Europe/Budapest
+
+# Pretty links: /2026/10/28/first-step-into-cozy-chaos/
+permalink: /:year/:month/:day/:title/
+
+# Markdown engine GitHub Pages uses.
+markdown: kramdown
+
+# The home-page preview of each post is its first paragraph
+# (Jekyll's default), cut to ~40 words in index.html.
+
+# Plugins. Only these (and a few others) are allowed by GitHub Pages
+# without extra setup — don't add random ones.
+plugins:
+  - jekyll-feed      # makes /feed.xml so people can follow you in RSS readers
+  - jekyll-seo-tag   # adds proper page titles / share-preview tags
+  - jekyll-sitemap   # makes /sitemap.xml for search engines
+
+# Every file in _posts gets layout: post unless the post says otherwise.
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+# Files that live in the repo but should NOT become pages on the site.
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor

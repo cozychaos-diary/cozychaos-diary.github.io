@@ -1,0 +1,15 @@
+<!--
+  Dark-green header band with the hanging garland, the blog title and tagline.
+  `relative_url` prefixes links with `baseurl` from _config.yml, so links keep
+  working whether the site lives at the domain root or in a /repo-name/ folder.
+-->
+<header class="site-header">
+  {% include garland.svg %}
+  <div class="site-header__text">
+    <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+    <p class="site-tagline">
+      {{ site.tagline }}<br>
+      <span class="site-subtitle">{{ site.subtitle }}</span>
+    </p>
+  </div>
+</header>

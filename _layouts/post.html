@@ -1,0 +1,69 @@
+---
+layout: default
+---
+{%- comment -%}
+  One diary entry, laid out like the scrapbook page:
+    left column  → torn date label, polaroid photo with the chapter title,
+                   and the framed "honestly?" note (all optional except title)
+    right column → maroon paper panel holding the post text ({{ content }})
+  Values come from the front matter at the top of each file in _posts:
+    title, date, chapter, photo, photo_alt, note
+{%- endcomment -%}
+<article class="entry">
+  <div class="entry__left">
+
+    <!-- Torn paper date label. Visible text "28 . 10"; the <time> tag carries the
+         full machine-readable date for search engines and screen readers. -->
+    <p class="date-tag">
+      <span class="tape tape--right" aria-hidden="true"></span>
+      date: <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d . %m" }}</time>
+    </p>
+
+    <!-- Polaroid. The chapter title doubles as the page's main heading (h1). -->
+    <figure class="polaroid">
+      <span class="tape tape--tl" aria-hidden="true"></span>
+      <span class="tape tape--br" aria-hidden="true"></span>
+      {% if page.photo %}
+        <img src="{{ page.photo | relative_url }}" alt="{{ page.photo_alt | default: '' | escape }}">
+      {% endif %}
+      <figcaption>
+        <h1 class="entry__title">{% if page.chapter %}chapter {{ page.chapter }}: {% endif %}{{ page.title }}</h1>
+      </figcaption>
+      <!-- Paperclip hanging off the frame's right edge -->
+      <svg class="doodle doodle--clip" aria-hidden="true"><use href="#d-clip"/></svg>
+    </figure>
+
+    <!-- Scattered doodles. Purely decorative: positioned in CSS, hidden from screen readers. -->
+    <svg class="doodle doodle--s1" aria-hidden="true"><use href="#d-star-fill"/></svg>
+    <svg class="doodle doodle--s2" aria-hidden="true"><use href="#d-star"/></svg>
+    <svg class="doodle doodle--s3" aria-hidden="true"><use href="#d-sparkle"/></svg>
+    <svg class="doodle doodle--b1" aria-hidden="true"><use href="#d-butterfly"/></svg>
+    <svg class="doodle doodle--h1" aria-hidden="true"><use href="#d-pixel-heart"/></svg>
+
+    {% if page.note %}
+    <!-- Wood-framed note board. markdownify lets the note use *italics* etc. -->
+    <aside class="board">
+      {{ page.note | markdownify }}
+    </aside>
+    {% endif %}
+  </div>
+
+  <div class="entry__right">
+    <div class="panel">
+      <span class="tape tape--top" aria-hidden="true"></span>
+      <svg class="doodle doodle--h2" aria-hidden="true"><use href="#d-heart"/></svg>
+      {{ content }}
+    </div>
+  </div>
+</article>
+
+<!-- Older/newer links. Jekyll fills page.previous (older) and page.next (newer). -->
+<nav class="pager" aria-label="More entries">
+  {% if page.previous %}
+    <a class="pager__link" href="{{ page.previous.url | relative_url }}">&larr; {{ page.previous.title }}</a>
+  {% else %}<span></span>{% endif %}
+  <a class="pager__link pager__home" href="{{ '/' | relative_url }}">all chapters</a>
+  {% if page.next %}
+    <a class="pager__link" href="{{ page.next.url | relative_url }}">{{ page.next.title }} &rarr;</a>
+  {% else %}<span></span>{% endif %}
+</nav>

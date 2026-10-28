@@ -1,0 +1,44 @@
+---
+layout: default
+title: home
+---
+{%- comment -%}
+  Home page: every post in _posts, newest first, as a scrapbook card.
+  site.posts is already sorted newest → oldest by Jekyll.
+  Each card is one link (the whole card is clickable).
+{%- endcomment -%}
+<section class="intro paper-note">
+  <span class="tape tape--top" aria-hidden="true"></span>
+  <p>a little diary about a big city, a stubborn job hunt, and learning that it's okay not to have it all figured out yet.</p>
+</section>
+
+<ol class="cards" reversed>
+  {% for post in site.posts %}
+  <li class="card">
+    <a class="card__link" href="{{ post.url | relative_url }}">
+      <span class="card__date">
+        <span class="tape tape--right" aria-hidden="true"></span>
+        {{ post.date | date: "%d . %m . %Y" }}
+      </span>
+
+      {% if post.photo %}
+      <span class="card__photo">
+        <!-- alt="" because the card's text already says what the entry is -->
+        <img src="{{ post.photo | relative_url }}" alt="" loading="lazy">
+      </span>
+      {% endif %}
+
+      <span class="card__body">
+        <span class="card__title">{% if post.chapter %}chapter {{ post.chapter }}: {% endif %}{{ post.title }}</span>
+        <!-- First paragraph of the post, HTML removed, cut to 40 words -->
+        <span class="card__excerpt">{{ post.excerpt | strip_html | truncatewords: 40 }}</span>
+        <span class="card__more">read this chapter &rarr;</span>
+      </span>
+    </a>
+  </li>
+  {% endfor %}
+</ol>
+
+{% if site.posts.size == 0 %}
+  <p class="empty">no chapters yet — the first one is coming soon.</p>
+{% endif %}
