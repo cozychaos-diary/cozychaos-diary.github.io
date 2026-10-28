@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 {%- comment -%}
-  HOME PAGE SHELL — a cleaned-up version of the Blogspot "Watermark" page:
-    • sunset sky at the top fading into red
-    • framed garden header box with the handwritten white title
-    • three columns: About me | posts | search + archive
-    • blush-pink footer
+  HOME PAGE SHELL (also used by About me and any page with layout: page)
+    • Y2K pink/olive swirl background (assets/img/bg-swirl.jpg)
+    • painted rose-garden header box with the handwritten white title + menu
+    • three columns: About me | posts | currently reading + search + archive
+    • every box is a Victorian die-cut frame (cream, mint dotted edge, pearls,
+      violets & ivy along the bottom) — see home.css
   The list of posts itself comes from index.html (inserted at the content tag).
   Journal entries do NOT use this file; they use _layouts/post.html → default.html.
 
-  Optional photos from _config.yml are passed to the CSS as custom properties
-  (--sky-photo, --header-photo). If they're not set, the CSS falls back to
-  the drawn gradient sky / garden, so nothing breaks.
+  Optional photos from _config.yml are handed to the CSS as custom properties
+  (--bg-photo, --header-photo). When they're not set, home.css falls back to
+  the painted artwork in assets/img/, so nothing breaks.
 {%- endcomment -%}
 <html lang="en">
 <head>
@@ -19,27 +20,28 @@
   {% seo %}
   {% feed_meta %}
 
-  <!-- Reenie Beanie = the Blogspot title handwriting. Georgia (body text) is
-       built into every computer, so it needs no download. -->
+  <!-- Fonts: Reenie Beanie = handwritten title; Cormorant Garamond = elegant
+       serif for headings. Georgia (body text) is built into every computer. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Reenie+Beanie&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{ '/assets/css/home.css' | relative_url }}">
+  <!-- ?v=… = build time; changes on every rebuild so browsers never reuse an
+       outdated cached copy of the CSS or the search script. -->
+  <link rel="stylesheet" href="{{ '/assets/css/home.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌹</text></svg>">
 </head>
 <body class="home"
   {%- if site.background_image or site.header_image %} style="
-    {%- if site.background_image %}--sky-photo: url('{{ site.background_image | relative_url }}');{% endif -%}
+    {%- if site.background_image %}--bg-photo: url('{{ site.background_image | relative_url }}');{% endif -%}
     {%- if site.header_image %}--header-photo: url('{{ site.header_image | relative_url }}');{% endif -%}
   "{% endif %}>
 
-  <!-- Sky layer behind everything: photo (if set) or gradient, fading into the red -->
-  <div class="sky" aria-hidden="true"></div>
+  <!-- Fixed background layer (stays put while the page scrolls, on phones too) -->
+  <div class="backdrop" aria-hidden="true"></div>
 
-  <!-- ===== Header box ===== -->
-  <header class="blog-header{% if site.header_image %} has-photo{% endif %}">
-    {% unless site.header_image %}{% include garland.svg %}{% endunless %}
+  <!-- ===== Header box: painted garden ===== -->
+  <header class="blog-header">
     <div class="blog-header__text">
       <h1 class="blog-title"><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
       <p class="blog-description">{{ site.tagline }} <span>{{ site.subtitle }}</span></p>
@@ -51,35 +53,43 @@
   <!-- ===== Three columns ===== -->
   <div class="blog-columns">
 
-    <!-- LEFT: About me (Blogger's profile widget) -->
+    <!-- LEFT: About me -->
     <aside class="col col--left" aria-label="About me">
       <section class="box widget">
         <h2 class="widget__title">About Me</h2>
         {% if site.avatar %}
-          <img class="avatar" src="{{ site.avatar | relative_url }}" alt="" width="80" height="80">
+          <img class="avatar" src="{{ site.avatar | relative_url }}" alt="" width="84" height="84">
         {% endif %}
         <p class="about__name">{{ site.author }}</p>
         <p>{{ site.about }}</p>
+        <p class="widget__more"><a href="{{ '/about/' | relative_url }}">more about me &raquo;</a></p>
       </section>
     </aside>
 
-    <!-- CENTER: the posts (from index.html) -->
+    <!-- CENTER: the posts (from index.html) or a page's text -->
     <main class="col col--main" id="posts">
       {{ content }}
     </main>
 
-    <!-- RIGHT: pages, search, archive -->
+    <!-- RIGHT: currently reading, search, archive -->
     <aside class="col col--right" aria-label="Sidebar">
 
-      <section class="box widget">
-        <h2 class="widget__title">Pages</h2>
-        <ul class="plain-list">
-          <li><a href="{{ '/' | relative_url }}">Home</a></li>
-          {% if site.posts.size > 0 %}
-            <li><a href="{{ site.posts.first.url | relative_url }}">Latest entry</a></li>
+      {% if site.reading %}
+      <!-- Currently reading: a burgundy rose-embossed journal with a gold rose
+           clasp. Title/author/cover come from `reading:` in _config.yml. -->
+      <section class="reading" aria-label="Currently reading">
+        <div class="reading__book">
+          <p class="reading__label">currently reading</p>
+          {% if site.reading.cover %}
+            <img class="reading__cover" src="{{ site.reading.cover | relative_url }}" alt="Cover of {{ site.reading.title | escape }}">
           {% endif %}
-        </ul>
+          <p class="reading__title">{{ site.reading.title }}</p>
+          {% if site.reading.author %}<p class="reading__author">{{ site.reading.author }}</p>{% endif %}
+          <span class="reading__clasp" aria-hidden="true">{% include gold-rose.svg %}</span>
+          <span class="reading__ribbon" aria-hidden="true"></span>
+        </div>
       </section>
+      {% endif %}
 
       <!-- Search: assets/js/search.js loads search.json (built by Jekyll) and
            filters it as you type. Works without any server. -->
@@ -113,9 +123,9 @@
 
   <!-- ===== Footer ===== -->
   <footer class="blog-footer">
-    <p>&copy; {{ site.time | date: "%Y" }} {{ site.author }} · Powered by GitHub Pages</p>
+    <p>&copy; {{ site.time | date: "%Y" }} {{ site.author }} · made with love &amp; a little chaos</p>
   </footer>
 
-  <script src="{{ '/assets/js/search.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/search.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 </body>
 </html>

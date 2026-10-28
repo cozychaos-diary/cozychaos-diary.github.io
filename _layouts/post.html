@@ -3,20 +3,23 @@ layout: default
 ---
 {%- comment -%}
   One diary entry, laid out like the scrapbook page:
-    left column  → torn date label, polaroid photo with the chapter title,
-                   and the framed "honestly?" note (all optional except title)
-    right column → maroon paper panel holding the post text ({{ content }})
+    left column  → graph-paper date label, polaroid photo with the chapter
+                   title, and the wood-framed note (all optional except title)
+    right column → maroon paper panel holding the post text
   Values come from the front matter at the top of each file in _posts:
-    title, date, chapter, photo, photo_alt, note
+    title, date, chapter, photo, photo_alt, note, stickers
+  Stickers are placed by _includes/stickers.html inside the photo, the note
+  and the panel, so they move with those pieces on every screen size.
 {%- endcomment -%}
 <article class="entry">
   <div class="entry__left">
 
-    <!-- Torn paper date label. Visible text "28 . 10"; the <time> tag carries the
+    <!-- Graph-paper date label "[ DATE: 28.10.2026 ]". The <time> tag carries the
          full machine-readable date for search engines and screen readers. -->
     <p class="date-tag">
-      <span class="tape tape--right" aria-hidden="true"></span>
-      date: <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d . %m" }}</time>
+      <span class="tape tape--date-l" aria-hidden="true"></span>
+      <span class="tape tape--date-r" aria-hidden="true"></span>
+      [ DATE: <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d.%m.%Y" }}</time> ]
     </p>
 
     <!-- Polaroid. The chapter title doubles as the page's main heading (h1). -->
@@ -31,6 +34,7 @@ layout: default
       </figcaption>
       <!-- Paperclip hanging off the frame's right edge -->
       <svg class="doodle doodle--clip" aria-hidden="true"><use href="#d-clip"/></svg>
+      {% include stickers.html area="photo" %}
     </figure>
 
     <!-- Scattered doodles. Purely decorative: positioned in CSS, hidden from screen readers. -->
@@ -44,6 +48,7 @@ layout: default
     <!-- Wood-framed note board. markdownify lets the note use *italics* etc. -->
     <aside class="board">
       {{ page.note | markdownify }}
+      {% include stickers.html area="note" %}
     </aside>
     {% endif %}
   </div>
@@ -53,6 +58,7 @@ layout: default
       <span class="tape tape--top" aria-hidden="true"></span>
       <svg class="doodle doodle--h2" aria-hidden="true"><use href="#d-heart"/></svg>
       {{ content }}
+      {% include stickers.html area="panel" %}
     </div>
   </div>
 </article>

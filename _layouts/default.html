@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 {%- comment -%}
-  Base layout. Every page is wrapped in this shell; the page's own HTML is
-  inserted at the content tag inside <main>. Layout chain for a post:
-  post.md → _layouts/post.html → this file.
+  JOURNAL ENTRY SHELL — the green scrapbook design.
+  Used by every post (post.md → _layouts/post.html → this file) and by 404.html.
+  The home page does NOT use this file; it uses _layouts/home.html.
+  The page's own HTML is inserted at the content tag inside <main>.
   (Liquid comment, not an HTML comment: Liquid runs tags even inside
   HTML comments, which would print the page twice.)
 {%- endcomment -%}
@@ -22,7 +23,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <!-- ?v=… is the build time (seconds since 1970). It changes on every GitHub
+       rebuild, so browsers treat the stylesheet as a new file and never show
+       an outdated cached copy after you change the CSS. -->
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   <!-- Browser-tab icon: a leaf emoji drawn as inline SVG, no image file needed -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
 </head>
