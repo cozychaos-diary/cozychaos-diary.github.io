@@ -121,7 +121,7 @@ a:focus-visible {
 /* ---------- header ---------- */
 .site-header {
   position: relative;
-  min-height: 230px;
+  min-height: 200px;
   padding: 72px 24px 34px;
   background: var(--grain), radial-gradient(ellipse at 70% 60%, #2a3a2d, var(--forest) 70%);
   color: var(--cream-text);
