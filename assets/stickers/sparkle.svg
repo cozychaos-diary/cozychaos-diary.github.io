@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 82 80" width="82" height="80"><defs><radialGradient id="sg" cx=".45" cy=".4" r=".6"><stop offset="0" stop-color="#fff"/>
+ <stop offset=".45" stop-color="#ffd1dc"/><stop offset=".8" stop-color="#e48aa2"/><stop offset="1" stop-color="#c9a24a"/></radialGradient>
+ <filter id="gl" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.6"/></filter></defs><path d="M32 2 Q37.1 26.9 62 32 Q37.1 37.1 32 62 Q26.9 37.1 2 32 Q26.9 26.9 32 2Z" fill="#fff" opacity=".8" filter="url(#gl)"/>
+<path d="M32 5 Q36.59 27.41 59 32 Q36.59 36.59 32 59 Q27.41 36.59 5 32 Q27.41 27.41 32 5Z" fill="url(#sg)" stroke="#c9a24a" stroke-width=".8"/>
+<path d="M56 2 Q57.36 8.64 64 10 Q57.36 11.36 56 18 Q54.64 11.36 48 10 Q54.64 8.64 56 2Z" fill="url(#sg)" stroke="#c9a24a" stroke-width=".6"/></svg>

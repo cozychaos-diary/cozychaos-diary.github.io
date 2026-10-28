@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 116 112" width="116" height="112"><defs><filter id="die" x="-20%" y="-20%" width="140%" height="140%">
+  <feMorphology in="SourceAlpha" operator="dilate" radius="3.2" result="d"/>
+  <feFlood flood-color="#fffdf8"/><feComposite in2="d" operator="in" result="white"/>
+  <feGaussianBlur in="d" stdDeviation="2.2"/><feOffset dx="1.2" dy="2.4" result="sh"/>
+  <feFlood flood-color="#1a0f0a" flood-opacity=".3"/><feComposite in2="sh" operator="in" result="shadow"/>
+  <feMerge><feMergeNode in="shadow"/><feMergeNode in="white"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter></defs><g filter="url(#die)">
+<path fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".75" d="M40 36 C34 28 46 22 40 12 M52 34 C46 26 58 20 52 8 M64 36 C58 28 70 22 64 14"/>
+<ellipse cx="50" cy="86" rx="42" ry="9" fill="#fffaf2" stroke="#2b2620" stroke-width="2.2" stroke-linejoin="round"/>
+<ellipse cx="50" cy="84" rx="26" ry="4.5" fill="none" stroke="#2b2620" stroke-width="1.2" opacity=".5"/>
+<path fill="none" stroke="#2b2620" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M80 52 C96 52 96 72 77 72"/>
+<path fill="none" stroke="#fffaf2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M80 52 C96 52 96 72 77 72"/>
+<path fill="#fffaf2" stroke="#2b2620" stroke-width="2.2" stroke-linejoin="round" d="M19 46 L81 46 C81 70 71 84 50 84 C29 84 19 70 19 46Z"/>
+<path fill="none" stroke="#7b2238" stroke-width="2" d="M22 58 C40 62 60 62 78 58"/>
+<ellipse cx="50" cy="46" rx="31" ry="6.5" fill="#a5714b" stroke="#2b2620" stroke-width="2.2"/>
+<path fill="#f4e2cc" d="M50 49.5 C44 46 44 43 47 42.5 C48.6 42.2 49.6 43 50 44 C50.4 43 51.4 42.2 53 42.5 C56 43 56 46 50 49.5Z"/></g></svg>

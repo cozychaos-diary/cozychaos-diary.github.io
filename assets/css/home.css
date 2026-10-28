@@ -1,68 +1,67 @@
 /* =====================================================================
-   HOME PAGE — cleaned-up Blogspot "Watermark" look
+   HOME PAGE (and About me / other pages) — Y2K × Victorian × garden
    ---------------------------------------------------------------------
-   What was kept from the Blogspot page:
-     sunset sky → red background, framed header box, white "Reenie Beanie"
-     title, Georgia text, maroon links, About Me / Search / Archive widgets,
-     blush-pink footer, three columns.
-   What was fixed:
-     • text sat directly on the sky/red boundary and was hard to read →
-       every column now sits on soft, readable "boxes"
-     • fixed 1100px desktop width (viewport=1100) → fully responsive
-     • empty table-based search widget → a real search box that works
-   Only used by index.html (_layouts/home.html). Entries use style.css.
+   • background: pink/olive airbrushed swirls with sparkles (bg-swirl.jpg)
+   • header: misty painted rose garden (header-garden.jpg), white handwritten title
+   • boxes: Victorian die-cut frames — cream paper, mint dotted edge, pearl
+     beads on top, violets & ivy along the bottom (frame-flowers.svg)
+   • sidebar: "currently reading" burgundy rose journal with a gold clasp
+   • accents: burgundy, antique gold, cream
+   All artwork in assets/img/ is original (generated for this site).
+   Journal entries use style.css, not this file.
    ===================================================================== */
 
 :root {
-  --red: #bd0d0d;                         /* Blogspot page red */
-  --red-deep: #8f0909;
-  --blush: #ffc8be;                       /* Blogspot footer pink */
-  --box: rgba(255, 246, 243, 0.92);       /* readable panel on sky and red */
-  --box-line: rgba(120, 30, 30, 0.12);
-  --text: #222;
-  --muted: #6b5b5b;
-  --link: #370005;                        /* Blogspot link maroon */
-  --link-hover: var(--red);
-  --title: "Reenie Beanie", "Comic Sans MS", cursive;
-  --serif: Georgia, Utopia, "Palatino Linotype", Palatino, serif;
+  /* --- colour tokens --- */
+  --cream: #fbf3e6;
+  --cream-deep: #f4e7d2;
+  --ink: #2c2226;
+  --muted: #7a6468;
+  --burgundy: #6b1730;
+  --burgundy-deep: #3f0b1b;
+  --gold: #c9a24a;
+  --gold-light: #f3dc9b;
+  --mint: #cfe2d1;          /* frame edge */
+  --mint-dot: #7fa58b;      /* the dots printed on the frame edge */
+  --pink: #f2a7b6;
+  --olive: #7d8a45;
 
-  /* Sunset gradient used when no background photo is set:
-     lilac at the top → dusty pink → peach → the red. */
-  --sky-gradient: linear-gradient(180deg,
-      #9f8db3 0%, #b89bb8 20%, #d4a6b4 42%, #e6b5ab 62%, #d9776a 82%, var(--red) 100%);
+  /* --- fonts --- */
+  --title: "Reenie Beanie", "Comic Sans MS", cursive;               /* handwritten */
+  --elegant: "Cormorant Garamond", Georgia, "Times New Roman", serif; /* headings */
+  --serif: Georgia, Utopia, "Palatino Linotype", Palatino, serif;    /* body text */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
 
 body.home {
-  position: relative;              /* anchors the .sky layer */
   margin: 0;
   min-height: 100vh;
   display: flex;                   /* column flex keeps the footer at the bottom */
   flex-direction: column;
-  font: 15px/1.6 var(--serif);
-  color: var(--text);
-  background: var(--red);          /* everything below the sky is red, like Blogspot */
+  font: 15.5px/1.65 var(--serif);
+  /* after the font shorthand (which would reset it): regular digits, because
+     Cormorant's default old-style "1" looks like an "ı" */
+  font-variant-numeric: lining-nums;
+  color: var(--ink);
+  background: var(--pink);         /* shown for a split second before the image loads */
   overflow-x: hidden;
 }
 
-/* The sky: first 820px of the page. Layer 1 is the optional photo
-   (--sky-photo, set from _config.yml; "none" if absent), layer 2 the gradient.
-   mask-image fades its bottom edge so it melts into the red instead of a hard line. */
-.sky {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 820px;
+/* Fixed background. A fixed, full-screen layer instead of
+   background-attachment:fixed, because phones ignore the latter.
+   --bg-photo is set from _config.yml (background_image); otherwise the swirl art. */
+.backdrop {
+  position: fixed;
+  inset: 0;
   z-index: -1;
-  background: var(--sky-photo, none) center top / cover no-repeat, var(--sky-gradient);
-  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
-          mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  background: var(--bg-photo, url("../img/bg-swirl.jpg")) center / cover no-repeat, var(--pink);
 }
 
-a { color: var(--link); text-decoration: none; }
-a:hover { color: var(--link-hover); text-decoration: underline; }
-a:focus-visible, input:focus-visible { outline: 3px dashed var(--red); outline-offset: 3px; }
+a { color: var(--burgundy); text-decoration: none; }
+a:hover { color: #a3304f; text-decoration: underline; text-underline-offset: 3px; }
+a:focus-visible, input:focus-visible { outline: 2px dashed var(--burgundy); outline-offset: 3px; }
 img { max-width: 100%; display: block; }
 
 .visually-hidden {
@@ -73,55 +72,41 @@ img { max-width: 100%; display: block; }
   white-space: nowrap;
 }
 
-/* ---------- header box ---------- */
+/* =====================================================================
+   HEADER — painted garden box
+   ===================================================================== */
 .blog-header {
   position: relative;
   width: calc(100% - 40px);
   max-width: 1100px;
-  min-height: 260px;
   margin: 30px auto 0;
+  border-radius: 4px;
   overflow: hidden;
-  /* Layer 1: optional header photo. Below it, the drawn "painted garden":
-     blurry pink + pale-green blooms over dark foliage. */
-  background:
-    var(--header-photo, none) center / cover no-repeat,
-    radial-gradient(circle at 12% 78%, rgba(232,160,170,.55), transparent 18%),
-    radial-gradient(circle at 34% 62%, rgba(214,226,160,.45), transparent 16%),
-    radial-gradient(circle at 58% 84%, rgba(240,178,186,.55), transparent 15%),
-    radial-gradient(circle at 76% 58%, rgba(200,220,150,.40), transparent 17%),
-    radial-gradient(circle at 92% 82%, rgba(236,170,180,.50), transparent 14%),
-    radial-gradient(ellipse at 50% 120%, #4c6a3c, transparent 70%),
-    linear-gradient(180deg, #24331f, #1d2920);
-  box-shadow: 0 10px 26px rgba(60, 20, 40, .35);
+  background: var(--header-photo, url("../img/header-garden.jpg")) center / cover no-repeat, #5d655c;
+  /* thin gold inner line + soft outer shadow = framed painting */
+  box-shadow: inset 0 0 0 1px rgba(243, 220, 155, .45), inset 0 0 60px rgba(0,0,0,.25),
+              0 12px 30px rgba(80, 20, 45, .35);
 }
-.garland {                        /* hanging vines + roses (shared with entries) */
-  position: absolute;
-  inset: 0 0 auto 0;
-  width: 100%;
-  height: 170px;
-  pointer-events: none;
-}
-.blog-header__text {
-  position: relative;             /* above the vines */
-  padding: 96px 34px 30px;
-}
-.has-photo .blog-header__text { padding-top: 34px; }  /* no vines → title can sit higher */
+.blog-header__text { position: relative; padding: 40px 38px 30px; }
 
 .blog-title {
   margin: 0;
   font-family: var(--title);
   font-weight: 400;
-  font-size: clamp(2.8rem, 8vw, 4.4rem);
+  font-size: clamp(2.8rem, 8vw, 4.6rem);
   line-height: 1;
 }
-.blog-title a { color: #fff; text-decoration: none; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+.blog-title a { color: #fff; text-decoration: none; text-shadow: 0 2px 10px rgba(0,0,0,.55); }
 .blog-description {
-  margin: .5rem 0 0;
-  max-width: 36em;
+  margin: .55rem 0 0;
+  max-width: 34em;
   color: #fff;
-  font-size: 1.1rem;
+  font-family: var(--elegant);
+  font-size: 1.25rem;
   font-style: italic;
-  text-shadow: 0 1px 4px rgba(0,0,0,.8);
+  font-weight: 500;
+  line-height: 1.35;
+  text-shadow: 0 1px 6px rgba(0,0,0,.75);
 }
 .blog-description span { opacity: .85; }
 
@@ -130,7 +115,7 @@ img { max-width: 100%; display: block; }
      • gradient fill + a solid darker shadow underneath = a raised, pressable button
      • ::after draws a dashed line just inside the edge = the stitching
      • hover lifts and tilts it slightly; pressing pushes it down
-     • the current page's button is filled with the Blogspot red          */
+     • the current page's button is burgundy velvet with gold text          */
 .nav { margin-top: 16px; }
 .nav__list {
   list-style: none;
@@ -146,11 +131,11 @@ img { max-width: 100%; display: block; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 15px 4px 12px;
+  padding: 5px 15px 4px 10px;
   font-family: var(--title);     /* same handwriting as the blog title */
   font-size: 1.3rem;
   line-height: 1;
-  color: var(--link);
+  color: var(--burgundy);
   text-decoration: none;
   background: linear-gradient(180deg, #fff8f5 0%, #ffe0d8 100%);
   border-radius: 999px;
@@ -161,13 +146,14 @@ img { max-width: 100%; display: block; }
   content: "";
   position: absolute;
   inset: 3px;
-  border: 1px dashed rgba(189, 13, 13, .35);
+  border: 1px dashed rgba(107, 23, 48, .35);
   border-radius: inherit;
   pointer-events: none;
 }
 .nav__icon { width: 14px; height: 14px; flex: none; }
+.nav__icon--art { width: 20px; height: 20px; margin: -3px 0; }   /* drawn seal / bow: a bit bigger */
 .nav__btn:hover {
-  color: var(--red);
+  color: #a3304f;
   text-decoration: none;
   transform: translateY(-2px) rotate(-1.5deg);
   box-shadow: 0 5px 0 var(--edge), 0 10px 16px rgba(0,0,0,.28);
@@ -176,143 +162,332 @@ img { max-width: 100%; display: block; }
   transform: translateY(2px);
   box-shadow: 0 1px 0 var(--edge), 0 2px 6px rgba(0,0,0,.22);
 }
-.nav__btn:focus-visible { outline: 3px dashed #fff; outline-offset: 4px; }
+.nav__btn:focus-visible { outline: 2px dashed #fff; outline-offset: 4px; }
 .nav__btn[aria-current="page"] { /* "you are here" */
-  --edge: #6e0606;
-  color: #fff;
-  background: linear-gradient(180deg, #d8302b 0%, var(--red) 100%);
+  --edge: #2a0712;
+  color: var(--gold-light);
+  background: linear-gradient(180deg, #8a2440 0%, var(--burgundy) 60%, var(--burgundy-deep) 100%);
 }
-.nav__btn[aria-current="page"]::after { border-color: rgba(255, 255, 255, .55); }
+.nav__btn[aria-current="page"]::after { border-color: rgba(243, 220, 155, .55); }
+/* burgundy seal/bow on a burgundy "current" button: a faint gold halo keeps it visible */
+.nav__btn[aria-current="page"] .nav__icon--art { filter: drop-shadow(0 0 1.2px #f3dc9b) drop-shadow(0 0 .6px #f3dc9b); }
 @media (prefers-reduced-motion: reduce) { .nav__btn { transition: none; } }
 
-/* ---------- three columns ---------- */
+/* =====================================================================
+   COLUMNS
+   ===================================================================== */
 .blog-columns {
   flex: 1 0 auto;
   width: 100%;
   max-width: 1140px;
   margin: 0 auto;
-  padding: 28px 20px 56px;
+  padding: 34px 20px 64px;
   display: grid;
-  grid-template-columns: 230px minmax(0, 1fr) 230px;
+  grid-template-columns: 230px minmax(0, 1fr) 236px;
   grid-template-areas: "left main right";
-  gap: 26px;
+  gap: 30px;
   align-items: start;
 }
 .col--left  { grid-area: left; }
 .col--main  { grid-area: main; min-width: 0; }
 .col--right { grid-area: right; }
-.col { display: grid; gap: 22px; }
+.col { display: grid; gap: 30px; }
 
-/* The readable panel every widget and post sits on */
+/* =====================================================================
+   BOXES — Victorian die-cut frames
+   ---------------------------------------------------------------------
+   .box          every panel: cream paper inside a mint border printed with
+                 tiny dots (radial-gradient dot grid), a thin cream + sage
+                 double outline (box-shadow rings), soft drop shadow
+   ::before      a row of pearls along the top edge
+   .frame        the big version (posts, About me): adds violets & ivy
+                 along the bottom edge (::after, frame-flowers.svg)
+   ===================================================================== */
 .box {
-  background: var(--box);
-  border: 1px solid var(--box-line);
-  border-radius: 3px;
-  padding: 18px 20px;
-  box-shadow: 0 6px 18px rgba(70, 10, 20, .18);
+  position: relative;
+  padding: 22px 22px 20px;
+  border: 5px solid transparent;
+  border-radius: 18px;
+  /* two backgrounds: cream fills the inside (padding-box); the dotted mint
+     pattern shows only in the 5px border (border-box) */
+  background:
+    linear-gradient(170deg, var(--cream), var(--cream-deep)) padding-box,
+    radial-gradient(circle, var(--mint-dot) .9px, transparent 1.3px) 0 0 / 4px 4px border-box,
+    linear-gradient(var(--mint), var(--mint)) border-box;
+  box-shadow:
+    0 0 0 1.5px #a9c4ae,                 /* sage outline right outside the dots */
+    0 0 0 3.5px rgba(251, 243, 230, .9), /* cream rim */
+    0 12px 26px rgba(80, 20, 45, .22);
+}
+.box::before {                           /* pearl beads */
+  content: "";
+  position: absolute;
+  top: -11px;
+  left: 26px;
+  right: 26px;
+  height: 11px;
+  /* one pearl drawn per 12px tile: white highlight → cream → shadowed edge */
+  background: radial-gradient(circle at 6px 6px, #fff 0 1.6px, #f6efe2 2.4px, #e2d4bd 4.2px, rgba(0,0,0,0) 4.8px) 0 0 / 12px 11px repeat-x;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.18));
+  pointer-events: none;
+}
+
+.frame { padding-bottom: 64px; }         /* room for the flowers */
+.frame::after {                          /* violets & ivy along the bottom */
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -30px;
+  width: min(100% + 30px, 520px);
+  aspect-ratio: 620 / 120;               /* matches frame-flowers.svg */
+  transform: translateX(-50%);
+  background: url("../img/frame-flowers.svg") center / contain no-repeat;
+  filter: drop-shadow(0 2px 2px rgba(40, 20, 30, .25));
+  pointer-events: none;
 }
 
 /* ---------- widgets ---------- */
 .widget__title {
-  margin: 0 0 .6em;
-  font-size: 20px;                /* Blogspot widget heading size */
-  font-weight: 400;
-  line-height: 1.2;
-  padding-bottom: .35em;
-  border-bottom: 1px dashed var(--box-line);
+  margin: 0 0 .7em;
+  padding-bottom: .4em;
+  font-family: var(--elegant);
+  font-size: 1.45rem;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.1;
+  color: var(--burgundy);
+  border-bottom: 1px solid rgba(201, 162, 74, .5);    /* thin gold rule */
 }
-.widget p { margin: 0 0 .5em; }
+.widget__title::after {                 /* tiny gold flourish after the heading */
+  content: " ✦";
+  font-style: normal;
+  font-size: .7em;
+  color: var(--gold);
+}
+.widget p { margin: 0 0 .55em; }
+.widget__more { margin: .4em 0 0; font-style: italic; }
 .avatar {
-  width: 80px; height: 80px;
+  width: 84px; height: 84px;
   object-fit: cover;
   border-radius: 50%;
   border: 3px solid #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,.2);
-  margin: 2px 0 10px;
+  box-shadow: 0 0 0 2px var(--gold), 0 3px 8px rgba(0,0,0,.2);
+  margin: 4px 0 12px;
 }
 .about__name { font-weight: 700; }
 
-.plain-list, .archive, .search__results { list-style: none; margin: 0; padding: 0; }
-.plain-list li { padding: 3px 0; }
-
-.archive__month { margin-top: 6px; font-weight: 700; color: var(--muted); font-size: .9rem; }
-.archive__month::before { content: "▾ "; }
-.archive__post { padding: 2px 0 2px 14px; }
+.archive, .search__results { list-style: none; margin: 0; padding: 0; }
+.archive__month {
+  margin-top: 6px;
+  font-family: var(--elegant);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.archive__month::before { content: "❦ "; color: var(--gold); }
+.archive__post { padding: 2px 0 2px 16px; }
 
 .search__input {
   width: 100%;
-  padding: 7px 9px;
+  padding: 7px 10px;
   font: inherit;
-  color: var(--text);
-  background: #fff;
-  border: 1px solid #cfb3ad;
-  border-radius: 2px;
+  color: var(--ink);
+  background: #fffdf9;
+  border: 1px solid #d8c4a4;
+  border-radius: 999px;
 }
-.search__results li { padding: 6px 0; border-top: 1px dashed var(--box-line); }
+.search__results li { padding: 6px 0; border-top: 1px dashed rgba(107,23,48,.18); }
 .search__results li:first-child { margin-top: 8px; }
 .search__results a { display: block; }
 .search__date { display: block; font-size: .8rem; color: var(--muted); }
 .search__none { font-style: italic; color: var(--muted); }
 
-/* ---------- posts list (center) ---------- */
+/* =====================================================================
+   CURRENTLY READING — burgundy rose-embossed journal
+   ---------------------------------------------------------------------
+   Layers on the book: embossed rose pattern (rose-emboss.svg, tiled) over a
+   velvet radial gradient. Inset shadows darken the spine (left) and edges.
+   ::before = stitched border just inside the edge.
+   .reading__clasp = black leather tab with the gold rose, on the right edge.
+   .reading__ribbon = black page ribbon hanging out of the bottom.
+   ===================================================================== */
+.reading { padding-top: 12px; }
+.reading__book {
+  position: relative;
+  margin: 0 16px 0 4px;
+  aspect-ratio: 3 / 4;
+  padding: 46px 20px 24px 26px;
+  border-radius: 5px 12px 12px 5px;
+  color: var(--gold-light);
+  text-align: center;
+  background:
+    url("../img/rose-emboss.svg") 0 0 / 170px 170px,
+    radial-gradient(ellipse at 40% 35%, #8a2440 0%, #6b1730 45%, #430c1d 100%);
+  box-shadow:
+    inset 14px 0 18px -8px rgba(0,0,0,.55),      /* spine */
+    inset 0 0 0 1px rgba(0,0,0,.4),
+    inset 0 0 30px rgba(0,0,0,.35),
+    6px 10px 22px rgba(60, 10, 30, .4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.reading__book::before {                 /* stitching around the cover */
+  content: "";
+  position: absolute;
+  inset: 8px 10px 8px 14px;
+  border: 1px dashed rgba(243, 220, 155, .35);
+  border-radius: 3px 8px 8px 3px;
+  pointer-events: none;
+}
+.reading__label {                        /* small white box at the top */
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  margin: 0;
+  padding: 4px 12px 3px;
+  white-space: nowrap;
+  font-family: "Courier New", monospace;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: #fffdf8;
+  box-shadow: 0 2px 5px rgba(0,0,0,.35);
+}
+.reading__cover {
+  width: 62%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border: 3px solid transparent;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold), #8a6424) border-box;  /* gilt frame */
+  box-shadow: 0 4px 10px rgba(0,0,0,.45);
+  margin-bottom: 6px;
+}
+.reading__title, .reading__author { margin: 0; position: relative; }
+.reading__title {
+  font-family: var(--elegant);
+  font-size: 1.35rem;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.15;
+  /* gold-foil text: a gold gradient painted through the letters */
+  background: linear-gradient(180deg, #fff1c4 0%, #e3c071 45%, #b48634 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.5));
+}
+.reading__author {
+  font-family: var(--elegant);
+  font-size: 1rem;
+  color: rgba(243, 220, 155, .85);
+}
+.reading__clasp {
+  position: absolute;
+  right: -16px;
+  top: 52%;
+  width: 46px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px 4px 4px 14px;
+  background: linear-gradient(180deg, #2a2427, #0f0c0d);
+  box-shadow: 0 3px 6px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12);
+}
+.gold-rose { width: 28px; height: 28px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
+.reading__ribbon {
+  position: absolute;
+  left: 22%;
+  bottom: -22px;
+  width: 7px;
+  height: 30px;
+  background: #141113;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);   /* forked ribbon end */
+}
+
+/* =====================================================================
+   POSTS LIST (center) and PAGES
+   ===================================================================== */
+.post-preview { padding: 26px 28px 70px; }
 .date-header {
   margin: 0 0 6px;
-  font-size: .85rem;
-  font-weight: 400;
-  letter-spacing: .04em;
+  font-family: "Courier New", monospace;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--muted);
 }
 .post-title {
-  margin: 0 0 12px;
-  font-size: 1.55rem;
-  font-weight: 400;
-  line-height: 1.25;
+  margin: 0 0 14px;
+  font-family: var(--elegant);
+  font-size: 1.85rem;
+  font-weight: 600;
+  line-height: 1.15;
 }
 .post-snippet { display: flow-root; }          /* contains the floated thumbnail */
 .post-snippet p { margin: 0; }
 .post-thumb {
   float: left;
   width: 140px;
-  margin: 4px 18px 8px 0;
-  padding: 6px 6px 16px;                       /* little polaroid frame */
+  margin: 4px 20px 10px 0;
+  padding: 6px 6px 18px;                       /* little polaroid frame */
   background: #fff;
   box-shadow: 0 3px 8px rgba(0,0,0,.2);
   transform: rotate(-2deg);
 }
 .post-thumb img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
-.jump-link { margin: 12px 0 0; text-align: right; font-size: 1.05rem; }
+.jump-link { margin: 14px 0 0; text-align: right; font-family: var(--elegant); font-size: 1.15rem; font-style: italic; font-weight: 600; }
 .post-footer {
   margin: 12px 0 0;
   padding-top: 8px;
-  border-top: 1px dashed var(--box-line);
+  border-top: 1px solid rgba(201, 162, 74, .4);
   font-size: .85rem;
+  font-style: italic;
   color: var(--muted);
 }
 .no-posts { text-align: center; }
+.feed-link {
+  margin: 10px 0 0;
+  text-align: center;
+  font-family: var(--elegant);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--burgundy-deep);
+}
+.feed-link a { text-decoration: underline; }
 
-/* ---------- ordinary pages (About me etc., _layouts/page.html) ---------- */
-.page-content { padding: 24px 28px; font-size: 1.05rem; }
+/* ordinary pages (About me etc., _layouts/page.html) */
+.page-content { padding: 30px 32px 74px; font-size: 1.05rem; }
 .page-content__title {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   font-family: var(--title);
   font-weight: 400;
-  font-size: 2.6rem;
+  font-size: 2.8rem;
   line-height: 1;
-  color: var(--red);
+  color: var(--burgundy);
 }
 .page-content p { margin: 0 0 1em; }
 .page-content p:last-child { margin-bottom: 0; }
 .page-content img { margin: 1em auto; padding: 6px 6px 16px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,.2); }
-.feed-link { margin: 0; text-align: center; color: #fff; }
-.feed-link a { color: #fff; text-decoration: underline; }
 
-/* ---------- footer ---------- */
+/* =====================================================================
+   FOOTER — burgundy velvet with a gold rule
+   ===================================================================== */
 .blog-footer {
-  padding: 30px 20px;
+  padding: 26px 20px;
   text-align: center;
-  color: #333;
-  background: var(--blush);
+  font-family: var(--elegant);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--gold-light);
+  background: radial-gradient(ellipse at 50% 0%, #7a1c36, var(--burgundy-deep));
+  border-top: 2px solid var(--gold);
 }
 .blog-footer p { margin: 0; }
 
@@ -324,20 +499,23 @@ img { max-width: 100%; display: block; }
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas: "main main" "left right";
   }
+  .reading__book { max-width: 260px; margin-left: auto; margin-right: auto; }
 }
 
 /* =====================================================================
    PHONE (≤ 640px): one column — posts, then About me, then the rest
    ===================================================================== */
 @media (max-width: 640px) {
-  .blog-header { width: calc(100% - 24px); margin-top: 12px; min-height: 0; }
-  .blog-header__text { padding: 92px 20px 24px; text-align: center; }
-  .blog-description { font-size: 1rem; margin-left: auto; margin-right: auto; }
+  .blog-header { width: calc(100% - 24px); margin-top: 12px; }
+  .blog-header__text { padding: 30px 18px 24px; text-align: center; }
+  .blog-description { font-size: 1.1rem; margin-left: auto; margin-right: auto; }
   .nav__list { justify-content: center; }
   .blog-columns {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "main" "left" "right";
-    padding: 20px 12px 44px;
+    padding: 26px 14px 50px;
   }
+  .post-preview { padding: 22px 20px 64px; }
   .post-thumb { width: 110px; margin-right: 14px; }
+  .page-content { padding: 24px 20px 66px; }
 }

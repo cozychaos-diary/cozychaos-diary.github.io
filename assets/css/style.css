@@ -44,7 +44,7 @@
 /* ---------- base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
 
 body {
   margin: 0;
@@ -203,6 +203,8 @@ a:focus-visible {
   transform: translateX(-50%) rotate(-4deg);
 }
 .nav__icon { width: 13px; height: 13px; flex: none; }
+/* the drawn wax seal / lace bow: sized in em so they grow with the button text */
+.nav__icon--art { width: 1.25em; height: 1.25em; margin: -.15em 0; }
 .nav__list li .nav__btn:hover {
   transform: rotate(0) translateY(-3px);
   box-shadow: 0 8px 14px rgba(0,0,0,.4);
@@ -213,6 +215,8 @@ a:focus-visible {
   background: var(--grain), linear-gradient(175deg, var(--maroon), var(--maroon-deep));
 }
 @media (prefers-reduced-motion: reduce) { .nav__btn { transition: none; } }
+/* burgundy seal/bow on a burgundy "current" button: a faint gold halo keeps it visible */
+.nav__btn[aria-current="page"] .nav__icon--art { filter: drop-shadow(0 0 1.2px #f3dc9b) drop-shadow(0 0 .6px #f3dc9b); }
 
 /* ---------- main column ---------- */
 .page {
@@ -232,17 +236,28 @@ a:focus-visible {
 }
 .entry__left { position: relative; padding-top: 4px; }
 
-/* Torn paper date label, pulled up so it overlaps the header like the original. */
+/* Graph-paper date label "[ DATE: 28.10.2026 ]", typewriter text, taped at both
+   ends, pulled up so it overlaps the header like the reference. */
 .date-tag {
   display: inline-block;
   margin: -34px 0 36px;
-  padding: 14px 34px 12px 26px;
-  font-family: var(--hand);
+  padding: 13px 26px 11px;
+  font-family: var(--type);
   font-weight: 700;
-  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  font-size: clamp(1rem, 2.4vw, 1.25rem);
+  letter-spacing: .08em;
   line-height: 1;
   transform: rotate(-2deg);
 }
+.date-tag::before {
+  /* overrides the cream paper: blue-grey grid lines every 9px, both directions */
+  background:
+    linear-gradient(rgba(96, 128, 168, .3) 1px, transparent 1px) 0 0 / 9px 9px,
+    linear-gradient(90deg, rgba(96, 128, 168, .3) 1px, transparent 1px) 0 0 / 9px 9px,
+    linear-gradient(170deg, #fdfcf6, #efece0);
+}
+.tape--date-l { width: 64px; height: 20px; top: -10px; left: -18px; transform: rotate(-24deg); }
+.tape--date-r { width: 64px; height: 20px; bottom: -8px; right: -22px; transform: rotate(-28deg); }
 
 /* Polaroid frame */
 .polaroid {
@@ -254,7 +269,7 @@ a:focus-visible {
   box-shadow: 0 8px 18px rgba(0,0,0,.35);
   transform: rotate(-1.5deg);
 }
-.polaroid img {
+.polaroid img:not(.sticker) {   /* the photo only, never a sticker */
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
@@ -314,7 +329,7 @@ a:focus-visible {
 .panel p { margin: 0 0 1.25em; }
 .panel p:last-child { margin-bottom: 0; }
 .panel a { color: #ffd9c2; }
-.panel img { margin: 1em auto; border: 8px solid var(--paper); }
+.panel img:not(.sticker) { margin: 1em auto; border: 8px solid var(--paper); }   /* photos inside the text */
 .panel h2, .panel h3 { font-family: var(--hand); font-weight: 700; line-height: 1.2; }
 .panel blockquote { margin: 1em 0; padding-left: 1em; border-left: 3px solid rgba(244,234,219,.5); font-style: italic; }
 .doodle--h2 { width: 30px; height: 28px; left: -40px; top: -6px; transform: rotate(-12deg); }
@@ -338,6 +353,53 @@ a:focus-visible {
   box-shadow: 0 3px 6px rgba(0,0,0,.25);
 }
 .pager__link:hover { background: #fff7e6; }
+
+/* =====================================================================
+   STICKERS (cat, dog, camera, coffee, stamp, diary-tag, sparkle, butterfly)
+   ---------------------------------------------------------------------
+   Each entry lists its stickers in its front matter; _includes/stickers.html
+   puts them inside the photo, the note or the panel. They are positioned
+   relative to that piece, so they stay in place on every screen size.
+   --w     base width of each sticker (its natural size)
+   --s     size multiplier (size: small / large)
+   --tilt  rotation in degrees (tilt: in the front matter)
+   --flip  -1 mirrors it (flip: true)
+   ===================================================================== */
+.sticker {
+  position: absolute;
+  z-index: 5;
+  width: calc(var(--w, 90px) * var(--s, 1));
+  height: auto;
+  pointer-events: none;
+  transform: rotate(var(--tilt, 0deg)) scaleX(var(--flip, 1));
+}
+.sticker--small { --s: .7; }
+.sticker--large { --s: 1.35; }
+.sticker--flip  { --flip: -1; }
+
+.sticker--cat       { --w: 132px; }
+.sticker--dog       { --w: 96px; }
+.sticker--camera    { --w: 80px; }
+.sticker--coffee    { --w: 72px; }
+.sticker--stamp     { --w: 112px; }
+.sticker--diary-tag { --w: 98px; }
+.sticker--sparkle   { --w: 44px; }
+.sticker--butterfly { --w: 46px; }
+
+/* spots on the PHOTO (polaroid) */
+.spot--photo-top    { bottom: calc(100% - 16px); right: 8%; }    /* sitting on the top edge */
+.spot--photo-left   { left: -14%; top: 36%; }
+.spot--photo-right  { right: -16%; top: 26%; }
+.spot--photo-bottom { right: -10%; bottom: -9%; }
+/* spots on the NOTE (wood-framed board) */
+.spot--note-top     { bottom: calc(100% + 2px); left: 8%; }
+.spot--note-bottom  { top: calc(100% - 26px); left: 2%; }         /* lying along the bottom edge */
+.spot--note-right   { right: -10%; top: -18%; }
+/* spots on the PANEL (the red text paper) */
+.spot--panel-top    { top: -34px; right: -12px; }
+.spot--panel-side   { right: -62px; top: 14%; }                   /* stuck over the right edge */
+.spot--panel-left   { left: -34px; top: 42%; }
+.spot--panel-bottom { right: -16px; bottom: -34px; }
 
 /* ---------- note scrap (used by the 404 page) ---------- */
 .paper-note {
@@ -379,6 +441,17 @@ a:focus-visible {
   .tape--right { right: -20px; }
   .tape--tl { left: -14px; }
   .tape--br { right: -14px; }
+  .tape--date-r { right: -12px; }
+
+  /* stickers a little smaller and tucked in, so nothing hangs off the screen */
+  .sticker { --s: .8; }
+  .sticker--small { --s: .56; }
+  .sticker--large { --s: 1.05; }
+  .spot--photo-left   { left: -8%; }
+  .spot--photo-right  { right: -8%; }
+  .spot--panel-side   { right: 4px; top: -30px; }   /* onto the top edge: no room at the side */
+  .spot--panel-left   { left: -10px; }
+  .spot--panel-bottom { right: -6px; }
 
   .pager { grid-template-columns: 1fr; text-align: center; }
   .pager > :last-child { text-align: center; }
