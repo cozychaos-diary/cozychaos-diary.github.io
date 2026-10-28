@@ -1,0 +1,25 @@
+{%- comment -%}
+  Prints this entry's stickers that belong to one area of the page.
+  Called from _layouts/post.html as: include stickers.html area="photo"
+  (and again with area="note" and area="panel").
+
+  Each sticker comes from the entry's front matter, e.g.
+      stickers:
+        - name: cat           ← file name in assets/stickers/ (without .svg)
+          spot: photo-top     ← where it goes (see the list in README.md)
+          size: small         ← optional: small | large
+          tilt: -8            ← optional: rotation in degrees
+          flip: true          ← optional: mirror it left↔right
+
+  How the area is matched: the part of `spot` before the first "-"
+  ("photo" in "photo-top") must equal the area passed in.
+  The sticker is decorative, so it gets alt="" and aria-hidden.
+{%- endcomment -%}
+{%- for s in page.stickers -%}
+  {%- assign sticker_area = s.spot | split: "-" | first -%}
+  {%- if sticker_area == include.area %}
+  <img class="sticker sticker--{{ s.name }} spot--{{ s.spot }}{% if s.size %} sticker--{{ s.size }}{% endif %}{% if s.flip %} sticker--flip{% endif %}"
+       src="{{ '/assets/stickers/' | append: s.name | append: '.svg' | relative_url }}" alt="" aria-hidden="true"
+       {%- if s.tilt %} style="--tilt: {{ s.tilt }}deg"{% endif %}>
+  {%- endif -%}
+{%- endfor -%}
