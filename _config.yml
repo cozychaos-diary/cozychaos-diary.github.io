@@ -47,7 +47,7 @@ nav:
     icon: bow
   - title: Childhood Favorites
     url: /childhood-favorites/
-    icon: stickers/childhood_favorites.png
+    icon: childhood-favorites
 
 # --- THE TWO LINES YOU MUST CHECK -----------------------------------
 # url:     https://YOUR-GITHUB-USERNAME.github.io   (no trailing slash)
