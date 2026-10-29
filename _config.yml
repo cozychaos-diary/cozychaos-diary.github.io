@@ -45,6 +45,9 @@ nav:
   - title: About me
     url: /about/
     icon: bow
+  - title: Childhood Favorites
+    url: /childhood-favorites/
+    icon: childhood_favorites
 
 # --- THE TWO LINES YOU MUST CHECK -----------------------------------
 # url:     https://YOUR-GITHUB-USERNAME.github.io   (no trailing slash)
