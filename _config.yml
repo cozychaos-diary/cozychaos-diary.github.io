@@ -50,7 +50,7 @@ nav:
 # url:     https://YOUR-GITHUB-USERNAME.github.io   (no trailing slash)
 # baseurl: ""            if your repo is named  YOUR-USERNAME.github.io
 #          "/REPO-NAME"  if your repo has any other name, e.g. "/cozy-chaos"
-url: "https://ditke06.github.io"
+url: "https://cozychaos-diary.github.io"
 baseurl: ""
 # ---------------------------------------------------------------------
 
